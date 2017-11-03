@@ -21,7 +21,7 @@ layers:
     draw:
       points:
         color: '#8f0d00'
-        size: 32px
+        size: 8px
         sprite: museum
         order: global.sdk_order_over_everything_but_text_0
   waterbodies:
