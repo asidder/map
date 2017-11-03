@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<center><head 
+	  <title>Rocky Mountain National Park</title>
+	  <meta charset="utf-8">
+	  <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
+	  <script src="https://mapzen.com/js/mapzen.min.js"></script>
+	  <style>
+	    #map {
+		  height: 100%;
+		  width: 100%;
+		  position: absolute;
+		  }
+		  html,body{margin: 0; padding: 0;}
+	  </style>
+	</head></center>
+	<body>
+	  <div id="map"></div>
+	  <script>
+		// Add a Mapzen API key
+		L.Mapzen.apiKey = 'mapzen-SYWND8R';
+		// Add a map to the 'map' div
+		var map = L.Mapzen.map('map', {
+		  center: [40.327223, -105.681014],
+		  zoom: 10.5,
+		  tangramOptions: {
+		    scene: "scene.yaml" 
+			//https://gist.githubusercontent.com/asidder/2644254bf4bcd6926971b4a8a12fabbc/raw/74b90edda7ed1c2ad85930df11a550255347b9a8/scene.yaml'
+			//L.Mapzen.BasemapStyles.Cinnabar //BubbleWrap//
+			}
+		  });
+	  </script>
+	</body>
+</html>
