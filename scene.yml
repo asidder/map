@@ -1,7 +1,5 @@
 ## need to import base style first followed by theme colors and labels
-import: ['https://mapzen.com/carto/refill-style/refill-style.zip', 
-'https://mapzen.com/carto/refill-style/9/themes/color-blue.zip', 
-'https://mapzen.com/carto/refill-style/9/themes/label-10.zip']
+import: https://mapzen.com/carto/refill-style/refill-style.yaml
 
 sources:
   nps_boundary:
