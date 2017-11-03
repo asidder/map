@@ -1,0 +1,432 @@
+global:
+    order_landuse: 100
+    order_above_landuse: 110
+
+    order_under_water: 190
+    order_water: 200
+    order_rivers: 200
+    order_lakes: 210
+    order_above_water: 220
+
+    order_under_roads: 290
+    order_roads: 300
+    order_above_roads: 310
+
+    order_over_everything_but_text: 490
+    order_text: 500
+    order_over_text: 510
+
+    color_park_interior: '#afd7c1'
+
+    color_highway: [0.988, 0.495, 0.439]
+    color_highway_light: [0.988, 0.695, 0.639]
+    color_highway_inner: [0.859, 0.859, 0.859]
+
+    color_water: '#f04040ff'
+    color_waterbody: '#99f'
+    color_water_text: '#00f'
+
+    color_background: '#d0ebcb'
+    color_text: '#000'
+
+    font_family_default: Ideal Sans
+
+    priority_trailhead_names: 50
+    priority_summit_names: 60
+    priority_road_names: 100
+    priority_big_lake_names: 190
+    priority_lake_names: 200
+    priority_river_names: 300
+    priority_trail_names: 310
+    priority_minor_road_names: 500
+
+fonts:
+    Ideal Sans:
+        - weight: normal # Regular
+          url: fonts/IdealSans-Book-Pro.otf
+        - weight: normal # Regular
+          style: italic
+          url: fonts/IdealSans-BookItalic-Pro.otf
+
+scene:
+    background:
+        color: global.color_background
+camera:
+    position: [-105.83662, 40.246843, 12]
+    type: flat
+    active: true
+
+lights:
+    light1:
+        type: directional
+        origin: world
+        direction: [1, 1, -1]
+        diffuse: [.3, .3, .3, 1.]
+        ambient: [0.7, 0.7, 0.7, 1.]
+
+styles:
+    dashed:
+        base: lines
+        dash: [2, 1]
+
+    park-border:
+        base: lines
+        texcoords: true
+        blend: inlay # Allows alpha to mix with background
+        shaders:
+            blocks:
+                color: |
+                    vec4 edge_color = vec4(0.506, 0.753, 0.6196, color.w);
+                    float coord = 2.0 * (1.0 - v_texcoord.x);
+                    float scale = 1.0 - step(1.0, coord);
+                    color.rgba = scale * mix(color.rgba, edge_color, smoothstep(0.0, 1.0, coord));
+
+    # We define some common attributes for text. By using the same order & repeat-distance
+    # all labels should stay away from each other.
+    # For labels that shouldn't prevent other labels from appearing (such as large region labels),
+    # mark them as collide: false (or give them a different order).
+    text-layer:
+        base: text
+        order: global.order_text
+        repeat_distance: 64px
+        font:
+            fill: global.color_text
+            # For some reason 'family' and 'size' are not inherited when using a named style,
+            # so they must be defined in each text-layer usage rather than here.
+
+# When used in android, the urls are updated by a SceneUpdate to reference the location
+# of the actual mbtiles file (which can not be in assets).
+# The path below is used when running tangram on the desktop and referencing this file
+sources:
+    complete:
+        type: MVT
+        url: map/complete.mbtiles
+
+    names:
+        type: MVT
+        url: map/names.mbtiles
+
+layers:
+    boundary:
+        data: { source: complete }
+        draw:
+            park-border:
+                width: 20px
+                color: global.color_park_interior
+                order: global.order_above_landuse
+            polygons:
+                color: global.color_park_interior
+                order: global.order_landuse
+
+    #
+    # Roads
+    #
+    roads:
+        data: { source: complete }
+
+        primary:
+            filter: { highway: [primary, secondary] }
+            draw:
+                lines:
+                    order: global.order_roads
+                    color: [[8, global.color_highway],
+                            [12, global.color_highway],
+                            [13, '#fff'],
+                            [16, '#fff']]
+                    width: [[8, 1.25px],
+                            [10, 1.2px],
+                            [11, 1.3px],
+                            [12, 1.5px],
+                            [13, 0.75px],
+                            [14, 1px],
+                            [15, 16m]]
+                    outline:
+                        order: global.order_under_roads
+                        color: [[10, global.color_highway_inner],
+                                [13, global.color_highway],
+                                [16, global.color_highway]]
+                        width: [[10, 0],
+                                [11, 0],
+                                [12, 0],
+                                [13, 1.0px],
+                                [14, 1.66px],
+                                [15, 2.25px],
+                                [16, 3px],
+                                [17, 3px]]
+#        secondary:
+#            filter: 
+#                highway: secondary
+#                $zoom: { min: 10 }
+#            draw:
+#                lines:
+#                    order: global.order_roads
+#                    color: '#fff'
+#                    #color: [10, [0.603, 0.620, 0.642], [11, '#fff']]
+#                    width: [[10, 1px], [12, 1px], [14, 2.5px]]
+#                    outline:
+#                        #color: [[10, [0.969,0.969,0.969]], [11, [0.629,0.619,0.615]], [14, [0.659,0.626,0.648]]]
+#                        color: '#999'
+#                        width: [[8, 0.5px], [10, 1px], [14, 1.5px]]
+
+        minor-road:
+            filter:
+                $zoom: { min: 12 }
+                not: { highway: [primary, secondary] }
+                    
+            draw:
+                lines:
+                    color: [[11, global.color_highway_light], [13, global.color_highway_light], [14, '#fff']]
+                    width: [[11, 0.2px], [12, 1px], [13, 0.75px], [14, .75px]]
+                    order: global.order_roads
+                    outline:
+                        color: global.color_highway
+                        width: [[12, 0px], [13, 0.2px], [14, 0.75px], [15, 1.0px]]
+                        order: global.order_under_roads
+
+    road-names:
+        data: { source: names, layer: roads }
+        primary-names:
+            filter: { highway: [primary, secondary] }
+            draw:
+                text-layer:
+                    priority: global.priority_road_names
+                    font:
+                        family: global.font_family_default
+                        size: [[10, 12px], [11, 12px], [12, 14px], [15, 16px]]
+                        weight: normal
+                        stroke: { color: global.color_park_interior, width: 3.5px }
+
+        non-primary-names:
+            filter:
+                all:
+                    - not: { highway: [primary, secondary] }
+            draw:
+                text-layer:
+                    priority: global.priority_minor_road_names
+                    font:
+                        family: global.font_family_default
+                        size: [[11, 10px], [12, 10px], [13, 12px], [15, 14px]]
+                        weight: normal
+                        stroke: { color: global.color_park_interior, width: 2.5px }
+                    
+    #
+    # Trails
+    #
+    trails:
+        data: { source: complete, layer: trails }
+        draw:
+            dashed:
+                interactive: true
+                color: '#c00'
+                width: [[10, 0.1px],[11, 0.5px], [12, 1px]]
+                order: global.order_above_roads
+    trail-names:
+        data: { source: names, layer: trails }
+        filter:
+            $zoom: { min: 11 }
+        draw:
+            text-layer:
+                priority: global.priority_trail_names
+                font:
+                    family: global.font_family_default
+                    size: [[11, 10px], [12, 10px], [13, 12px], [15, 14px]]
+                    weight: normal
+                    stroke: { color: global.color_park_interior, width: 3.5px }
+    #
+    # Water - lakes, ice, and marshes (waterbodies), rivers & streams (flows)
+    #
+    water:
+        data: { source: complete, layer: water }
+        ice:
+          filter: 
+              $geometry: polygon
+              kind: ice
+              $zoom: { min: 11 }
+          draw:
+              polygons:
+                  color: [[11, '#e0dddddd'], [13, '#ddd']]
+                  order: global.order_under_water
+        marsh:
+          filter: 
+              kind: marsh
+              $geometry: polygon
+              $zoom: { min: 11 }
+          draw:
+              polygons:
+                  color: '#3c3'
+                  order: global.order_under_water
+
+        # Show major segments first. A liberal proxy for a major segment is that it has a name.
+        early-flows:
+            filter:
+                $geometry: line
+                $zoom: { min: 11 }
+                has_name: true
+            draw:
+                lines:
+                    color: global.color_water
+                    width: [[11, 0.2px], [12, .5px], [13, .75px], [14, 1px], [15, 8]]
+                    order: global.order_rivers
+        flows:
+            filter: 
+                $geometry: line
+                $zoom: { min: 13 }
+                has_name: false
+            draw:
+                lines:
+                    color: global.color_water
+                    width: [[13, 0.2px], [14, .5px], [15, 5]]
+                    order: global.order_rivers
+        lakes:
+            filter:
+                all:
+                    - $geometry: polygon
+                    - not: { kind: [marsh, ice] }
+                any:
+                    # show labels for smaller bodies of water areas at higher zooms
+                    - { area: { min: 500000 } }
+                    - { $zoom: { min: 11 }, area: { min: 20000 } }
+                    - { $zoom: { min: 12 }, area: { min: 10000 } }
+                    - { $zoom: { min: 13 }, area: { min: 1000 } }
+                    - { $zoom: { min: 14 }, area: { min: 100 } }
+                    - { $zoom: { min: 15 } }
+            draw:
+                polygons:
+                    interactive: true
+                    color: global.color_waterbody
+                    order: global.order_lakes
+                lines:
+                    width: [[11, 0], [12, 0.5px], [13, 0.75px], [14, 1px], [15, 8]]
+                    color: global.color_water
+                    order: global.order_above_water
+        # Show lakes a bit earlier at transparency
+        lakes-early:
+            filter:
+                all:
+                    - $geometry: polygon
+                    - not: { kind: [marsh, ice] }
+                any:
+                    # show labels for smaller bodies of water areas at higher zooms
+                    - { area: { min: 500000 } }
+                    - { $zoom: { min: 10 }, area: { min: 20000 } }
+                    - { $zoom: { min: 11 }, area: { min: 10000 } }
+                    - { $zoom: { min: 12 }, area: { min: 1000 } }
+                    - { $zoom: { min: 13 }, area: { min: 100 } }
+                    - { $zoom: { min: 14 } }
+            draw:
+                polygons:
+                    interactive: true
+                    color: '#e09999ff'
+                    order: global.order_under_water
+    water-names:
+        data: { source: names, layer: water }
+
+        rivers:
+            filter:
+                $geometry: line
+                $zoom: { min: 13 }
+            draw:
+                text-layer:
+                    priority: global.priority_river_names
+                    offset: [0px, -8px]
+                    font:
+                        fill: global.color_water_text
+                        family: global.font_family_default
+                        size: 12px
+                        style: italic
+                        weight: normal
+
+        # Large bodies of water can have their labels in the center.
+        water-area-labels-center:
+            filter: 
+                $geometry: point
+                name: true
+                area: { min: 500000 }
+            draw:
+                text-layer:
+                    text_wrap: 8
+                    priority: global.priority_big_lake_names
+                    font:
+                        fill: global.color_water_text
+                        family: global.font_family_default
+                        style: italic
+                        size: [[10, 12px], [11, 12px], [12, 14px]]
+                        weight: normal
+                    
+        # Other bodies of water have their names off to the side.
+        # We could have a 'right' variation that copies almost all of this but offsets
+        # the other way to put more labels on screen.
+        water-area-labels-left:
+            filter: 
+                all:
+                    - $geometry: point
+                    - name: true
+                    - area: { max: 500000 }
+                any:
+                    # show labels for smaller bodies of water areas at higher zooms
+                    - { $zoom: { min: 12 }, area: { min: 50000 } }
+                    - { $zoom: { min: 14 }, area: { min: 10000 } }
+                    - { $zoom: { min: 15 }, area: { min: 5000 } }
+                    - { $zoom: { min: 16 }, area: { min: 1000 } }
+                    - { $zoom: { min: 17 } }
+            draw:
+                text-layer:
+                    interactive: true
+                    text_wrap: 8
+                    anchor: left
+                    offset: [-10px, 0px]
+                    priority: global.priority_lake_names
+                    font:
+                        fill: global.color_water_text
+                        family: global.font_family_default
+                        style: italic
+                        size: 12px
+                        weight: normal
+
+    trailheads:
+        data:  { source: names, layer: trailheads }
+        filter:
+            all:
+              - $zoom: { min: 12 }
+        draw:
+            points:
+                interactive: true
+                order: global.order_over_text
+                size: 5px
+                color: black
+                priority: global.priority_trailhead_names
+                text:
+                    anchor: [bottom-right, bottom-left]
+                    optional: true
+                    offset: [0px, -10px]
+                    font:
+                        fill: global.color_text
+                        family: global.font_family_default
+                        style: normal
+                        size: 12px
+                        weight: normal
+
+    summits:
+        data:  { source: names, layer: places }
+        filter:
+            all:
+              - $zoom: { min: 13 }
+              - class: Summit
+        draw:
+            points:
+                interactive: true
+                order: global.order_over_text
+                size: 5px
+                color: black
+                priority: global.priority_summit_names
+                text:
+                    anchor: [bottom-right, bottom-left]
+                    optional: true
+                    offset: [0px, -10px]
+                    font:
+                        fill: global.color_text
+                        family: global.font_family_default
+                        style: normal
+                        size: 12px
+                        weight: normal
+
