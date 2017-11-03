@@ -21,9 +21,11 @@ layers:
     draw:
       polygons:
         color: '#115973'
+        order: global.sdk_order_over_everything_but_text_0
       lines:
         width: 2px
         color: '#0a3746'
+        order: global.sdk_order_over_everything_but_text_0
   _national_park:
     data: { source: nps_boundary }
     draw:
