@@ -7,8 +7,7 @@ sources:
 	nps_boundary:
         type: GeoJSON
 		url: https://build.afieldtrails.com/job/db_ROMO/ws/bazel-bin/afieldtrails/romo/tiles/boundary_geojson.geojson
-		#https://gist.githubusercontent.com/asidder/96faafbe9738761983fe32eb77fbbbae/raw/b447b2d2b395ac6b9daa10809c71a3eddc03f932/boundary_geojson.geojson
-		
+				
 layers:
 	_national_park:
         data: { source: nps_boundary }
