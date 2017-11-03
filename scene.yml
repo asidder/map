@@ -43,5 +43,3 @@ layers:
         width: 2pm
         color: '#a84f00'
         order: global.sdk_order_over_everything_but_text_0
-        
-
