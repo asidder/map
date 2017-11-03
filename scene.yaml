@@ -1,21 +1,17 @@
-## need to import base style first followed by theme colors and labels
-import: ['https://mapzen.com/carto/refill-style/refill-style.zip',
-		'https://mapzen.com/carto/refill-style/9/themes/color-blue.zip',
-		'https://mapzen.com/carto/refill-style/9/themes/label-10.zip']
-		
+import: https://mapzen.com/carto/walkabout-style/6/walkabout-style.yaml
+
 sources:
-	nps_boundary:
+    _nps_boundary:
         type: GeoJSON
-		url: 'layers/boundary_geojson.geojson'
-				
+        url: https://raw.githubusercontent.com/asidder/map/master/layers/boundary_geojson.geojson
 layers:
-	_national_park:
-        data: { source: nps_boundary }
+    _national_park:
+        data: { source: _nps_boundary }
         draw:
             polygons:
                 color: '#25804f'
                 order: global.sdk_order_under_roads_0
             lines:
-                width: 1px
-                color: '#2b2b2b'
+                width: 2px
+                color: '#e34400'
                 order: global.sdk_order_under_roads_1
