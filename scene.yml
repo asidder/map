@@ -16,13 +16,6 @@ sources:
     url: https://raw.githubusercontent.com/asidder/map/master/layers/waterbody_geojson.geojson
     
 layers:
-#  trails:
-#    data: { source: trails }
-#   draw:
-#      lines:
-#        width: 2px
-#        color: '#a84f00'
-#        order: global.sdk_order_over_everything_but_text_0
   waterbodies:
     data: { source: waterbodies }
     draw:
