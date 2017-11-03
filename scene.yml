@@ -2,7 +2,7 @@
 import: ['https://mapzen.com/carto/refill-style/refill-style.zip', 
 'https://mapzen.com/carto/refill-style/9/themes/color-blue.zip', 
 'https://mapzen.com/carto/refill-style/9/themes/label-10.zip']
-		
+
 sources:
   nps_boundary:
     type: GeoJSON
