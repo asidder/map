@@ -4,7 +4,7 @@ import: https://mapzen.com/carto/refill-style/refill-style.yaml
 sources:
   nps_boundary:
     type: GeoJSON
-    url: https://build.afieldtrails.com/job/db_ROMO/ws/bazel-bin/afieldtrails/romo/tiles/boundary_geojson.geojson/*view*/
+    url: https://raw.githubusercontent.com/asidder/map/master/layers/boundary_geojson.geojson
     
 layers:
   _national_park:
