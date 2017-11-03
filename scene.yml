@@ -16,6 +16,14 @@ sources:
     url: https://raw.githubusercontent.com/asidder/map/master/layers/waterbody_geojson.geojson
     
 layers:
+  trailheads:
+    data: { source: trailheads }
+    draw:
+      points:
+        color: '#8f0d00'
+        size: 32px
+        sprite: museum
+        order: global.sdk_order_over_everything_but_text_0
   waterbodies:
     data: { source: waterbodies }
     draw:
