@@ -4,16 +4,16 @@ import: https://mapzen.com/carto/refill-style/refill-style.yaml
 sources:
   nps_boundary:
     type: GeoJSON
-    url: https://gist.githubusercontent.com/asidder/96faafbe9738761983fe32eb77fbbbae/raw/b447b2d2b395ac6b9daa10809c71a3eddc03f932/boundary_geojson.geojson
-  
+    url: https://raw.githubusercontent.com/asidder/map/master/layers/boundary_geojson.geojson
+    
 layers:
   _national_park:
-  data: { source: nps_boundary }
-  draw:
-    polygons:
-      color: '#25804f'
-      order: global.sdk_order_under_roads_0
-    lines:
-      width: 1px
-      color: '#2b2b2b'
-      order: global.sdk_order_under_roads_1
+    data: { source: nps_boundary }
+    draw:
+      polygons:
+        color: '#25804f'
+        order: global.sdk_order_under_roads_0
+      lines:
+        width: 1px
+        color: '#2b2b2b'
+        order: global.sdk_order_under_roads_1
