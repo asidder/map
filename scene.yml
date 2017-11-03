@@ -16,6 +16,14 @@ sources:
     url: https://raw.githubusercontent.com/asidder/map/master/layers/waterbody_geojson.geojson
     
 layers:
+  waterbodies:
+    data: { source: waterbodies }
+    draw:
+      polygons:
+        color: '#115973'
+      lines:
+        width: 2px
+        color: '#0a3746'
   _national_park:
     data: { source: nps_boundary }
     draw:
@@ -26,11 +34,4 @@ layers:
         width: 1px
         color: '#2b2b2b'
         order: global.sdk_order_under_roads_1
-  waterbodies:
-    data: { source: waterbodies }
-    draw:
-      polygons:
-        color: '#115973'
-      lines:
-        width: 2px
-        color: '#0a3746'
+
