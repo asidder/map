@@ -5,6 +5,15 @@ sources:
   nps_boundary:
     type: GeoJSON
     url: https://raw.githubusercontent.com/asidder/map/master/layers/boundary_geojson.geojson
+  trailheads:
+    type: GeoJSON
+    url: https://raw.githubusercontent.com/asidder/map/master/layers/trailheads_geojson.geojson
+  trails:
+    type: GeoJSON
+    url: https://raw.githubusercontent.com/asidder/map/master/layers/trails_geojson.geojson
+  waterbodies:
+    type: GeoJSON
+    url: https://raw.githubusercontent.com/asidder/map/master/layers/waterbody_geojson.geojson
     
 layers:
   _national_park:
@@ -17,3 +26,11 @@ layers:
         width: 1px
         color: '#2b2b2b'
         order: global.sdk_order_under_roads_1
+  waterbodies:
+    data: { source: waterbodies }
+    draw:
+      polygons:
+        color: '#115973'
+      lines:
+        width: 2px
+        color: '#0a3746'
