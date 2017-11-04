@@ -100,7 +100,7 @@ styles:
 sources:
     complete:
         type: MVT
-        url: map/complete.mbtiles
+        url: map/layers/complete.mbtiles
 
     names:
         type: MVT
