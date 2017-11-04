@@ -1,5 +1,5 @@
 ## need to import base style first followed by theme colors and labels
-import: https://mapzen.com/carto/walkabout-style/6/themes/label-5.yaml 
+import: https://mapzen.com/carto/walkabout-style/walkabout-style.yaml
 
 sources:
   nps_boundary:
