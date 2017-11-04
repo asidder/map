@@ -39,6 +39,7 @@ layers:
     draw:
       polygons:
         color: '#25804f'
+        blend: overlay
         order: global.sdk_order_under_roads_0
       lines:
         width: 1px
